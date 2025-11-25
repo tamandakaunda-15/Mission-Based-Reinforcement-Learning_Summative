@@ -1,0 +1,16 @@
+# Core Reinforcement Learning Libraries
+stable-baselines3[extra]>=2.2.1
+gymnasium>=0.29.1
+
+# Numerical Computing and Visualization
+numpy>=1.26.2
+pandas>=2.1.4 # Useful for data logging and analysis
+matplotlib>=3.8.2 # Useful for plotting training curves
+pygame>=2.5.2 # Recommended library for "Good" quality 2D visualization
+
+# General Utility
+tqdm>=4.66.1 # monitors training progress
+
+#  different visualization library, replace 'pygame' with:
+# pybullet (for 3D physics simulation)
+# pyglet (often used by gymnasium for simple rendering)
