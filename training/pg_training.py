@@ -239,11 +239,11 @@ if __name__ == '__main__':
     
     # 1. Run PPO Training
     print("\n--- Starting PPO Training (SB3) ---")
-    #run_policy_gradient_training("PPO", PPO, ppo_configs)
+    run_policy_gradient_training("PPO", PPO, ppo_configs)
     
     # 2. Run A2C Training
     print("\n--- Starting A2C Training (SB3) ---")
-    #run_policy_gradient_training("A2C", A2C, a2c_configs)
+    run_policy_gradient_training("A2C", A2C, a2c_configs)
 
     # 3. Run Manual REINFORCE Training
     print("\n--- Starting REINFORCE Training (Manual/PyTorch) ---")
