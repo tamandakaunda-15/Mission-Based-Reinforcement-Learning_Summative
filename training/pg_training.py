@@ -6,6 +6,7 @@ from torch import nn # Needed for nn.Module in REINFORCE
 from stable_baselines3 import PPO, A2C
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.utils import get_device
+from torch.utils.tensorboard import SummaryWriter 
 
 # Fix for imports when running from module
 import sys
@@ -96,7 +97,7 @@ def run_reinforce_training(run_id, params):
     model_path = os.path.join(MODEL_DIR, f"{run_name}.pth") 
     
     env = make_vec_env(DropoutPreventionEnv, n_envs=1)
-    
+    writer = SummaryWriter(log_dir=os.path.join(LOG_DIR, run_name))
     obs_dim = env.observation_space.shape[0]
     action_dim = env.action_space.n
 
@@ -172,11 +173,14 @@ def run_reinforce_training(run_id, params):
         th.nn.utils.clip_grad_norm_(policy.parameters(), max_norm=0.5)
         optimizer.step()
 
+        mean_reward = np.mean([r.item() for r in rewards])
+        writer.add_scalar('rollout/ep_rew_mean', mean_reward, global_step=episode)
+
         # Simple logging for progress tracking
         if (episode + 1) % 200 == 0 or episode == 0:
             mean_reward = np.mean([r.item() for r in rewards])
             print(f"Episode {episode + 1}/{NUM_EPISODES}: Mean Reward: {mean_reward:.2f}")
-
+    writer.close()
     th.save(policy.state_dict(), model_path)
     print(f"--- Training Finished. Policy saved to {model_path} ---")
 
@@ -227,6 +231,9 @@ if __name__ == '__main__':
         {'learning_rate': 5e-4, 'gamma': 0.97, 'num_episodes': 2000},
         {'learning_rate': 1e-4, 'gamma': 0.95, 'num_episodes': 500},
     ]
+
+
+
 
     # --- EXECUTE TRAINING RUNS ---
     
